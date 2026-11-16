@@ -141,7 +141,8 @@ job-digest/
 │   ├── SPEC.md                     # what Job Digest does (source of truth)
 │   ├── ARCHITECTURE.md             # structure, configuration, deployment
 │   ├── SECURITY.md                 # privacy and security guards
-│   └── PLAN.md                     # build milestones and post-v1 backlog
+│   ├── PLAN.md                     # build milestones and post-v1 backlog
+│   └── HOWTO.md                    # task-oriented guide: setup, tuning, troubleshooting
 ├── migrations/                     # Alembic database migrations
 │   ├── env.py
 │   ├── script.py.mako

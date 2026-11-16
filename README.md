@@ -43,7 +43,7 @@ Python, Go, AWS
 
 ```
 job-digest/
-├── docs/                   # SPEC, ARCHITECTURE, SECURITY, PLAN
+├── docs/                   # SPEC, ARCHITECTURE, SECURITY, PLAN, HOWTO
 ├── src/job_digest/         # the application (sources, processing, storage, notifiers, renderers)
 ├── migrations/             # Alembic database migrations
 ├── tests/                  # unit and integration tests, recorded fixtures
@@ -131,7 +131,7 @@ Every secret here must also appear in `.env.example` and in the `env` block of `
 
 ### 7. Turn on security features
 
-In **Settings → Code security**, enable secret scanning with push protection, Dependabot, and private vulnerability reporting. In **Settings → Actions → General**, set workflow permissions to read-only. See [docs/SECURITY.md](docs/SECURITY.md).
+In **Settings → Code security**, enable secret scanning with push protection, Dependabot, and private vulnerability reporting. In **Settings → Actions → General**, set workflow permissions to read-only. The same settings can be switched on with the GitHub CLI: see [docs/HOWTO.md](docs/HOWTO.md#repository-security-setup-github-settings). Background: [docs/SECURITY.md](docs/SECURITY.md).
 
 ### 8. Enable the workflows
 
@@ -177,9 +177,11 @@ Sources, storage, notifiers and renderers are adapters behind small interfaces. 
 ```bash
 uv sync
 uv run pre-commit install
-uv run ruff format . && uv run ruff check .
+uv run ruff format --check .
+uv run ruff check .
 uv run mypy src
 uv run pytest
+uv run pre-commit run --all-files
 ```
 
 Tests never call live APIs; they use recorded fixtures in `tests/fixtures/`. AI coding agents follow [AGENTS.md](AGENTS.md).
