@@ -1,0 +1,83 @@
+# Example Job Digest profile with neutral sample values.
+# Copy to profile.yaml (git-ignored) and edit. For GitHub Actions, paste the
+# whole file into the JOB_DIGEST_PROFILE secret, and keep your local copy:
+# a secret cannot be read back once saved.
+#
+# Check it with:  uv run job-digest validate-profile
+
+profile_version: 1
+
+user_id: me
+timezone: Europe/Berlin
+
+# Jobs are kept if their regions include one of these, or are unknown.
+eligible_regions:
+  - Germany
+  - EU
+  - Europe
+  - Worldwide
+
+# Role tiers: points for a title match (fit score, max 40). The highest
+# matching tier wins. A title that matches no tier gets 0.
+role_tiers:
+  - points: 40
+    titles: [Tech Lead, Staff Engineer, Engineering Manager]
+  - points: 30
+    titles: [Senior Software Engineer]
+  - points: 18
+    titles: [Senior SRE, Senior Data Engineer]
+  - points: 10
+    titles: [Backend Engineer]
+
+# Skills. Weights say how strongly you want a skill matched: higher for
+# skills you know deeply, low or 0 for ones you only touched.
+# skills_fit = 40 x min(1, matched_weight / skills_saturation)
+# A match in the title or tags counts fully; one only in the description
+# counts half; one only under "nice to have" counts a quarter.
+skills_saturation: 14        # default if omitted: half of the total weight
+skills:
+  - name: TypeScript
+    weight: 10
+    aliases: [TS]
+  - name: Kotlin
+    weight: 6
+  - name: Go
+    weight: 5
+    aliases: [golang]
+    case_sensitive: true     # short, common word: match "Go" only as written
+  - name: Azure
+    weight: 4
+  - name: Terraform
+    weight: 3
+  - name: Distributed systems
+    weight: 3
+    aliases: [distributed computing]   # never plain "distributed"
+  - name: LLM
+    weight: 3
+    aliases: [LLMs, AI agents, OpenAI]
+    scope: title_tags        # count only title/tag matches (vendors appear in blurbs)
+  - name: Redis
+    weight: 2
+
+# Hard exclusions (gates). A job whose title matches any of these is excluded.
+exclude:
+  roles: [Frontend, Full-stack]     # role types
+  levels: [Principal]               # seniority levels
+  title_languages: [PHP, Ruby]      # languages named in the title
+
+# Languages you work in. A job whose description requires another language
+# and mentions none of these gets the language penalty.
+primary_languages: [TypeScript, Kotlin]
+
+# Points for the pieces of the 0-100 score. All optional; these are the defaults.
+scoring:
+  role_fit: 40
+  skills_fit: 40
+  region_known: 10
+  pay_listed: 10
+  language_penalty: 20
+
+# Jobs whose fit (role + skills - penalty, 0-80) is below this are not sent.
+# Calibrate with `job-digest dry-run`. Keep it above skills_fit so that skills
+# alone, without a role match, can never qualify.
+min_fit: 45

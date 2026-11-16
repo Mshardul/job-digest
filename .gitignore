@@ -1,0 +1,43 @@
+# --- Private data: never commit (also blocked by a pre-commit hook) ---
+.env
+.env.*
+!.env.example
+profile.yaml
+profile.*.yaml
+!profile.example.yaml
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+.turso/
+
+# --- Logs and local output ---
+*.log
+/scratch/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# --- Editors and local AI-tool state (shared rules live in AGENTS.md / CLAUDE.md) ---
+.vscode/
+.idea/
+.kilo/
+.claude/settings.local.json
+CLAUDE.local.md

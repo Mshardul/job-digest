@@ -1,0 +1,27 @@
+# Privacy and hygiene guards; see docs/SECURITY.md.
+# Install once after cloning:  pre-commit install
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: detect-private-key
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+
+  - repo: local
+    hooks:
+      - id: block-private-files
+        name: block private files (.env, profile.yaml, databases)
+        entry: python3 scripts/block_private_files.py
+        language: system
+        # Receives every staged path, so it still fires after `git add -f`.
+        pass_filenames: true
